@@ -1,0 +1,32 @@
+{
+  "name": "io-passthrough-api",
+  "version": "1.0.0",
+  "description": "fast api for io io",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run test",
+    "build": "babel src/index.js -d dist",
+    "start": "nodemon --exec babel-node src/index.js",
+    "serve": "node dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kpilcicki/io-passthrough-api.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kpilcicki/io-passthrough-api/issues"
+  },
+  "homepage": "https://github.com/kpilcicki/io-passthrough-api#readme",
+  "dependencies": {
+    "koa": "^2.6.2"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.2.0",
+    "@babel/core": "^7.2.0",
+    "@babel/node": "^7.2.0",
+    "@babel/preset-env": "^7.2.0",
+    "nodemon": "^1.18.8"
+  }
+}
