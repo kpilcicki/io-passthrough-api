@@ -20,7 +20,12 @@
   },
   "homepage": "https://github.com/kpilcicki/io-passthrough-api#readme",
   "dependencies": {
-    "koa": "^2.6.2"
+    "dotenv": "^6.2.0",
+    "json-rpc-client": "^0.2.2",
+    "koa": "^2.6.2",
+    "node-fetch": "^2.3.0",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.0",
