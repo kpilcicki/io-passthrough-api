@@ -23,3 +23,5 @@ passport.use(new JwtStrategy({
         done(error, false);
     }
 } ));
+
+export default passport;
