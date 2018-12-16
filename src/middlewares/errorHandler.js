@@ -4,8 +4,8 @@ export default async (ctx, next) => {
     try {
         await next();
     } catch (err) {
-        ctx.log.error('Error occurred' +  err.message);
+        ctx.log.error('Error occurred: ' + err.message);
         ctx.status = err.statusCode || STATUS_CODES.INTERNAL_SERVER_ERROR;
-        ctx.body = err.message;
+        ctx.body = { devMessage: err.message };
     }
 }

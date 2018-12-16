@@ -6,9 +6,10 @@
   "scripts": {
     "test": "npm run test",
     "build": "babel src/index.js -d dist",
+    "serve": "node dist/index.js",
     "start": "nodemon --exec babel-node src/index.js",
     "debug": "nodemon --inspect --exec babel-node src/index.js",
-    "serve": "node dist/index.js"
+    "deploy": "npm build && npm serve"
   },
   "repository": {
     "type": "git",
