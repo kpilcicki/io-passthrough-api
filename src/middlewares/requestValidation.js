@@ -1,13 +1,15 @@
 import Joi from 'joi';
+import ApiError from '../errors/ApiError'
+import STATUS_CODES from '../utils/statusCode';
 
 export default function validateRequest(schema) {
     return async (ctx, next) => {
-        const result = Joi.validate(ctx.request.body, schema);
+        const result = Joi.validate(ctx.body, schema);
 
         if(result.error) {
-            const error = new Error('Validation error');
-
-            error.rawError = result.error;
+            const error = new ApiError(STATUS_CODES.BAD_REQUEST, 'Request body validation error');
+            //TODO concat string
+            //error.rawError = result.error;
             throw error;
         }
 

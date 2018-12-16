@@ -6,7 +6,6 @@ export const loginSchema = Joi.object().keys({
 });
 
 export const voteSchema = Joi.object().keys({
-    voterId: Joi.number().positive().integer().required(),
     candidateId: Joi.number().positive().integer().required(),
     ballotId: Joi.number().positive().integer().required()
 });

@@ -1,9 +1,13 @@
 import Router from 'koa-router';
 import User from '../db/models/user';
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
+
 import validateRequest from '../middlewares/requestValidation'
 import {loginSchema} from "../requestSchemas";
-import bcrypt from "bcryptjs";
+import ApiError from '../errors/ApiError';
+import STATUS_CODES from '../utils/statusCode';
+
 import env from '../config';
 
 const router = new Router();
@@ -21,7 +25,7 @@ router.post('/login', validateRequest(loginSchema), async ctx => {
                 { expiresIn: '30m'} )
         };
     } else {
-        throw new Error('Authentication failed. Bad login or password');
+        throw new ApiError(STATUS_CODES.UNAUTHORIZED, 'Authentication failed. Bad login or password');
     }
 });
 
