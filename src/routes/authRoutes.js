@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs';
 import validateRequest from '../middlewares/requestValidation';
 import {loginSchema} from '../requestSchemas';
 import ApiError from '../errors/ApiError';
-import STATUS_CODES from '../utils/statusCode';
+import { STATUS_CODES } from '../utils/index';
 
 import env from '../config';
 

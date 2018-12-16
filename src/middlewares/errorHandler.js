@@ -1,4 +1,4 @@
-import STATUS_CODES from '../utils/statusCode';
+import { STATUS_CODES } from '../utils/index';
 
 export default async (ctx, next) => {
     try {

@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import ApiError from '../errors/ApiError'
-import STATUS_CODES from '../utils/statusCode';
+import { STATUS_CODES } from '../utils/index';
 
 export default function validateRequest(schema) {
     return async (ctx, next) => {

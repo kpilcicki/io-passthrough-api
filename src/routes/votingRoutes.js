@@ -1,12 +1,10 @@
 import Router from 'koa-router';
+import map from 'lodash/map';
 import { blockchain, web3 } from '../services/blockchain';
 import requestValidation from '../middlewares/requestValidation';
-import {voteSchema} from '../requestSchemas';
+import { voteSchema } from '../requestSchemas';
 import ApiError from '../errors/ApiError';
-import STATUS_CODES from '../utils/statusCode';
-import map from 'lodash/map';
-
-import { to } from '../utils';
+import { to, STATUS_CODES } from '../utils';
 import jwt from '../middlewares/jwt';
 
 const router = new Router();
