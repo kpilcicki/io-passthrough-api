@@ -3,7 +3,7 @@ import dbConnection from '../dbConnection';
 
 export default dbConnection.define('user', {
     id: {type: Sequelize.INTEGER.UNSIGNED, allowNull: false, primaryKey: true},
-    login: {type: Sequelize.INTEGER.UNSIGNED, allowNull: false},
+    login: {type: Sequelize.STRING, allowNull: false, validate: { is: '/^\d+$/' } },
     hashPassword: {type: Sequelize.STRING, allowNull: false}
     }, {
     freezeTableName: true,
