@@ -1,5 +1,10 @@
 import Router from 'koa-router';
-import { blockchain } from '../services/blockchain';
+import { blockchain, web3 } from '../services/blockchain';
+import map from 'lodash/map';
+
+import { to } from '../utils';
+
+import _ from 'lodash';
 
 const router = new Router();
 
@@ -11,15 +16,43 @@ router.get('/', async (ctx, next) => {
   await next();
 });
 
-router.get('/name/:name', async (ctx, next) => {
-  await blockchain.setSystemName(ctx.params.name).send();
+router.get('/ballot/:id', async ctx => {
+  const ballotId = ctx.params.id;
+
+  const response = await blockchain.getCandidateNamesForBallot(ballotId).call();
+  const candidates = map(response, web3.utils.hexToUtf8)
+
+  ctx.body = candidates;
 });
 
-router.get('/ballot', async (ctx, next) => {
-  await next();
-  const res = await blockchain.ballots(0).call();
-  console.log(res);
-  ctx.body = res;
-})
+router.get('/ballots', async ctx => {
+  const response = await blockchain.ballots().call();
+  console.log(response);
+
+  ctx.body = response;
+});
+
+router.post('/vote', async ctx => {
+  const { ballotId, voterId, candidateId } =  ctx.request.body;
+  console.log(ctx.request.body);
+
+  var [err, ballot] = await to(blockchain.ballots(ballotId).call());
+  if(err) {
+    console.log('eer');
+    throw new Error('There is no corresponding ballot');
+  }
+  
+  if (candidateId >= ballot.candidatesSize) throw new Error('There is no such candidate for this ballot');
+
+
+  var [err, response] = await to(blockchain.vote(ballotId, voterId, candidateId).send());
+  if(err) {
+    const error = new Error('There is no such voter');
+    error.rawError = err;
+    throw error;
+  }
+
+  ctx.status = 201;    
+});
 
 export const indexRoutes = router;

@@ -1,5 +1,5 @@
-export const to = (promise, explicitError) => {
+export const to = (promise) => {
   return promise
     .then(value => [null, value])
-    .catch(err => [{ ...err, ...explicitError }, null]);
+    .catch(err => [err, null]);
 } 

@@ -1,4 +1,5 @@
 import Koa from 'koa';
+import bodyParser from 'koa-bodyparser';
 require('dotenv').config();
 
 import { authRoutes, indexRoutes } from './routes';
@@ -8,8 +9,8 @@ import { blockchain } from './services/blockchain';
 
 const app = new Koa();
 
+app.use(bodyParser());
 app.use(async (ctx, next) => {
-  ctx.body = await blockchain.systemName().call();
   await next();
 });
 
