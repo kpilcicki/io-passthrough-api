@@ -27,9 +27,12 @@ router.get('/ballot/:id', async ctx => {
   ctx.body = allCandidates;
 });
 
-router.get('/ballots', async ctx => {
+router.get('/ballot', async ctx => {
   const [err, response] = await to(blockchain.getBallots().call());
-  if(err) throw new ApiError(STATUS_CODES.INTERNAL_SERVER_ERROR, 'Error retrieving ballots from blockchain');
+  if(err) {
+    throw new ApiError(STATUS_CODES.INTERNAL_SERVER_ERROR, 'Error retrieving ballots from blockchain');
+  }
+
   const { states, candidatesSizes } = response;
   const allBallots = map(states, (state, idx) => ({
     state,

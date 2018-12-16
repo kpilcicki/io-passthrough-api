@@ -7,9 +7,9 @@ import { authRoutes, votingRoutes, publicRoutes } from './routes';
 
 const app = new Koa();
 
-app.use(errorHandler);
 app.use(bodyParser());
-app.use(logger({ prettyPrint: true }))
+app.use(logger({ prettyPrint: true }));
+app.use(errorHandler);
 
 app.use(votingRoutes.routes());
 app.use(authRoutes.routes());

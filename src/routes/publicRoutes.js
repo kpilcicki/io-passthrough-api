@@ -6,12 +6,13 @@ import { to, STATUS_CODES } from '../utils';
 
 const router = new Router();
 
-router.get('/ballotResults/:ballotId', async ctx => {
+router.get('/ballotResult/:ballotId', async ctx => {
   const ballotId = ctx.params.ballotId;
 
   const [err, Bresponse] = await to(blockchain.ballots(ballotId).call());
+  console.log(Bresponse);
   if (err) throw new ApiError(STATUS_CODES.BAD_REQUEST, 'There is no such ballot');
-  if (Bresponse.state == true) throw new ApiError(STATUS_CODES.BAD_REQUEST, 'The ballot has not yet ended');
+  if (Bresponse.isActive == true) throw new ApiError(STATUS_CODES.BAD_REQUEST, 'The ballot has not yet ended');
 
   const [cerr, response] = await to(blockchain.getCandidatsForBallot(ballotId).call());
   if(cerr) throw new ApiError(STATUS_CODES.INTERNAL_SERVER_ERROR, 'Something went wrong');
