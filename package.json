@@ -23,6 +23,7 @@
     "bcrypt": "^3.0.2",
     "bcryptjs": "^2.4.3",
     "dotenv": "^6.2.0",
+    "joi": "^14.3.0",
     "json-rpc-client": "^0.2.2",
     "jsonwebtoken": "^8.4.0",
     "koa": "^2.6.2",

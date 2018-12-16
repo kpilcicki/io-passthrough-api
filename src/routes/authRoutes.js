@@ -1,12 +1,14 @@
 import Router from 'koa-router';
 import User from '../db/models/user';
 import jwt from 'jsonwebtoken';
+import validateRequest from '../middlewares/requestValidation'
+import {loginSchema} from "../requestSchemas";
 import bcrypt from "bcryptjs";
 import env from '../config';
 
 const router = new Router();
 
-router.post('/login', async ctx => {
+router.post('/login', validateRequest(loginSchema), async ctx => {
     const {login, password} = ctx.request.body;
     const user = await User.findOne({where: {login}});
 
