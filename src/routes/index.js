@@ -1,2 +1,2 @@
-export { indexRoutes } from './indexRoutes';
+export { votingRoutes } from './votingRoutes';
 export { authRoutes } from './authRoutes';

@@ -2,9 +2,8 @@ import Router from 'koa-router';
 import User from '../db/models/user';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-
-import validateRequest from '../middlewares/requestValidation'
-import {loginSchema} from "../requestSchemas";
+import validateRequest from '../middlewares/requestValidation';
+import {loginSchema} from '../requestSchemas';
 import ApiError from '../errors/ApiError';
 import STATUS_CODES from '../utils/statusCode';
 

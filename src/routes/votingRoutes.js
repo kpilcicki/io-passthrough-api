@@ -1,5 +1,9 @@
 import Router from 'koa-router';
 import { blockchain, web3 } from '../services/blockchain';
+import requestValidation from '../middlewares/requestValidation';
+import {voteSchema} from '../requestSchemas';
+import ApiError from '../errors/ApiError';
+import STATUS_CODES from '../utils/statusCode';
 import map from 'lodash/map';
 
 import { to } from '../utils';
@@ -8,22 +12,13 @@ import jwt from '../middlewares/jwt';
 const router = new Router();
 router.use(jwt);
 
-router.get('/test', async(ctx, next) => {
-  console.log(ctx.state.jwtpayload.userId);
-});
-
-router.get('/', async (ctx, next) => {
-  ctx.body = {
-    whatis: 'love',
-    babydont: 'hurtme'
-  };
-  await next();
-});
-
 router.get('/ballot/:id', async ctx => {
   const ballotId = ctx.params.id;
 
-  const response = await blockchain.getCandidateNamesForBallot(ballotId).call();
+  const [err, response] = await to(blockchain.getCandidateNamesForBallot(ballotId).call());
+  if(err) {
+    throw new ApiError(STATUS_CODES.BAD_REQUEST, 'There is no such ballot');
+  }
   const candidates = map(response, web3.utils.hexToUtf8)
 
   ctx.body = candidates;
@@ -31,27 +26,26 @@ router.get('/ballot/:id', async ctx => {
 
 router.get('/ballots', async ctx => {
   const response = await blockchain.ballots().call();
-  console.log(response);
 
   ctx.body = response;
 });
 
-router.post('/vote', async ctx => {
+router.post('/vote', requestValidation(voteSchema), async ctx => {
   const { ballotId, candidateId } =  ctx.request.body;
   const voterId = ctx.state.jwtpayload.userId;
 
   var [err, ballot] = await to(blockchain.ballots(ballotId).call());
   if(err) {
-    console.log('eer');
-    throw new Error('There is no corresponding ballot');
+    throw new ApiError(STATUS_CODES.BAD_REQUEST, 'There is no corresponding ballot');
   }
   
-  if (candidateId >= ballot.candidatesSize) throw new Error('There is no such candidate for this ballot');
+  if (candidateId >= ballot.candidatesSize) throw new ApiError(STATUS_CODES.BAD_REQUEST, 'There is no such candidate for this ballot');
 
 
   var [err, response] = await to(blockchain.vote(ballotId, voterId, candidateId).send());
   if(err) {
-    const error = new Error('There is no such voter');
+    //TODO waiting for blockchain returned status codes
+    const error = new ApiError(STATUS_CODES.BAD_REQUEST, 'Voter is invalid');
     error.rawError = err;
     throw error;
   }
@@ -59,4 +53,4 @@ router.post('/vote', async ctx => {
   ctx.status = 201;    
 });
 
-export const indexRoutes = router;
+export const votingRoutes = router;
