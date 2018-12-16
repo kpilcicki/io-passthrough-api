@@ -3,10 +3,14 @@ import { blockchain, web3 } from '../services/blockchain';
 import map from 'lodash/map';
 
 import { to } from '../utils';
-
-import _ from 'lodash';
+import jwt from '../middlewares/jwt';
 
 const router = new Router();
+router.use(jwt);
+
+router.get('/test', async(ctx, next) => {
+  console.log(ctx.state.jwtpayload.userId);
+});
 
 router.get('/', async (ctx, next) => {
   ctx.body = {
@@ -33,8 +37,8 @@ router.get('/ballots', async ctx => {
 });
 
 router.post('/vote', async ctx => {
-  const { ballotId, voterId, candidateId } =  ctx.request.body;
-  console.log(ctx.request.body);
+  const { ballotId, candidateId } =  ctx.request.body;
+  const voterId = ctx.state.jwtpayload.userId;
 
   var [err, ballot] = await to(blockchain.ballots(ballotId).call());
   if(err) {
