@@ -1,7 +1,13 @@
 import Router from 'koa-router';
 import { blockchain } from '../services/blockchain';
+import jwt from '../middlewares/jwt';
 
 const router = new Router();
+router.use(jwt);
+
+router.get('/test', async(ctx, next) => {
+  console.log(ctx.state.jwtpayload.userId);
+});
 
 router.get('/', async (ctx, next) => {
   ctx.body = {
