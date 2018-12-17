@@ -3,7 +3,7 @@ import bodyParser from 'koa-bodyparser';
 import logger from 'koa-pino-logger';
 import errorHandler from './middlewares/errorHandler';
 
-import { authRoutes, votingRoutes, publicRoutes } from './routes';
+import { authRoutes, votingRoutes, publicRoutes, serverRoutes } from './routes';
 
 const app = new Koa();
 
@@ -14,5 +14,6 @@ app.use(errorHandler);
 app.use(votingRoutes.routes());
 app.use(authRoutes.routes());
 app.use(publicRoutes.routes());
+app.use(serverRoutes.routes());
 
 app.listen(3010);
