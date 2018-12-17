@@ -1,16 +1,21 @@
-FROM node:10-alpine as Base
+FROM node:10 as Base
 
-RUN apk add git python make gcc g++ bash
+RUN apt-get update
+RUN apt-get install git python make gcc g++ bash
 
-RUN apk add nano
+# RUN apk add --no-cache --virtual .gyp \
+#         python \
+#         make \
+#         g++ \
+#     && npm install \
+#     && apk del .gyp
 
 WORKDIR /app
 COPY . .
 
 RUN npm install; \
-    npm build; 
+    npm run build; 
 
 EXPOSE 3010
 
-CMD [ "npm start" ]
-
+CMD [ "npm", "run", "start" ]
