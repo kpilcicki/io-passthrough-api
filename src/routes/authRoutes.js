@@ -11,7 +11,12 @@ import env from '../config';
 
 const router = new Router();
 
-router.post('/login', validateRequest(loginSchema), async ctx => {
+export class AuthManager {
+  constructor() {
+    this.router = new Router();
+  }
+
+  async login(ctx) {
     const {login, password} = ctx.request.body;
     const user = await User.findOne({where: {login}});
 
@@ -26,6 +31,11 @@ router.post('/login', validateRequest(loginSchema), async ctx => {
     } else {
         throw new ApiError(STATUS_CODES.UNAUTHORIZED, 'Authentication failed. Bad login or password');
     }
-});
+  }
 
-export const authRoutes = router;
+  routes() {
+    this.router.post('/login', validateRequest(loginSchema), this.login);
+
+    return this.router.routes();
+  }
+}

@@ -6,27 +6,37 @@ import { to, STATUS_CODES } from '../utils';
 
 const router = new Router();
 
-router.get('/ballotResult/:ballotId', async ctx => {
-  const ballotId = ctx.params.ballotId;
+export class PublicRoutesManager {
+  constructor() {
+    this.router = new Router();
+  }
 
-  const [err, Bresponse] = await to(blockchain.ballots(ballotId).call());
-  console.log(Bresponse);
-  if (err) throw new ApiError(STATUS_CODES.BAD_REQUEST, 'There is no such ballot');
-  if (Bresponse.isActive == true) throw new ApiError(STATUS_CODES.BAD_REQUEST, 'The ballot has not yet ended');
+  async getBallotResults(ctx) {
+    const ballotId = ctx.params.ballotId;
 
-  const [cerr, response] = await to(blockchain.getCandidatsForBallot(ballotId).call());
-  if(cerr) throw new ApiError(STATUS_CODES.INTERNAL_SERVER_ERROR, 'Something went wrong');
- 
-  const { names, voteCounts } = response;
+    const [err, Bresponse] = await to(blockchain.ballots(ballotId).call());
+    console.log(Bresponse);
+    if (err) throw new ApiError(STATUS_CODES.BAD_REQUEST, 'There is no such ballot');
+    if (Bresponse.isActive == true) throw new ApiError(STATUS_CODES.BAD_REQUEST, 'The ballot has not yet ended');
 
-  const allCandidates = map(names, (name, idx) => ({
-    name: web3.utils.hexToUtf8(name),
-    voteCount: voteCounts[idx],
-    id: idx,
-  }));
+    const [cerr, response] = await to(blockchain.getCandidatsForBallot(ballotId).call());
+    if(cerr) throw new ApiError(STATUS_CODES.INTERNAL_SERVER_ERROR, 'Something went wrong');
+  
+    const { names, voteCounts } = response;
 
-  ctx.body = allCandidates;
-  ctx.status = STATUS_CODES.OK;
-});
+    const allCandidates = map(names, (name, idx) => ({
+      name: web3.utils.hexToUtf8(name),
+      voteCount: voteCounts[idx],
+      id: idx,
+    }));
 
-export const publicRoutes = router;
+    ctx.body = allCandidates;
+    ctx.status = STATUS_CODES.OK;
+  }
+
+  routes() {
+    this.router.get('/ballotResult/:ballot', this.getBallotResults);
+
+    return this.router.routes();
+  }
+}

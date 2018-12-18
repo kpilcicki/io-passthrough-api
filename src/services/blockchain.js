@@ -3,7 +3,7 @@ import VoteManager from '../contracts/VoteManager.json';
 
 import env from '../config';
 
-export const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+export const web3 = new Web3(new Web3.providers.HttpProvider(env.BLOCKCHAIN_URI));
 const address = env.CONTRACT_ADDRESS;
 
 const options = {
