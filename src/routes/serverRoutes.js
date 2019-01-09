@@ -11,7 +11,8 @@ router.get('/serverInfo', async ctx => {
         serverStatus: 'on',
         environmentVariables: {
             contractAddress: env.CONTRACT_ADDRESS,
-            selfAddress: env.SELF_ADDRESS
+            selfAddress: env.SELF_ADDRESS,
+            blockchainAddress: env.BLOCKCHAIN_ADDRESS
         }
     }
 });
