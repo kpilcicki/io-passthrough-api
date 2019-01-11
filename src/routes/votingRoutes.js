@@ -53,11 +53,10 @@ router.post('/vote', requestValidation(voteSchema), async ctx => {
   
   if (candidateId >= ballot.candidatesSize) throw new ApiError(STATUS_CODES.BAD_REQUEST, 'There is no such candidate for this ballot');
 
-
   var [err, response] = await to(blockchain.vote(ballotId, voterId, candidateId).send());
+
   if(err) {
-    //TODO waiting for blockchain returned status codes
-    const error = new ApiError(STATUS_CODES.BAD_REQUEST, 'Voter is invalid');
+    const error = new ApiError(STATUS_CODES.BAD_REQUEST, 'There is no such voter or voter has already voted');
     error.rawError = err;
     throw error;
   }
