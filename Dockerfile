@@ -13,8 +13,8 @@ RUN apt-get install git python make gcc g++ bash
 WORKDIR /app
 COPY . .
 
-RUN npm install; \
-    npm run build; 
+RUN npm install;
+RUN npm run build; 
 
 EXPOSE 3010
 

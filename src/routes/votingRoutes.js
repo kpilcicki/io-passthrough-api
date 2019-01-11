@@ -20,8 +20,8 @@ router.get('/ballot/:id', async ctx => {
   const { names } = response;
 
   const allCandidates = map(names, (name, idx) => ({
-    name: web3.utils.hexToUtf8(name),
-    id: idx,
+      id: idx,
+      name: web3.utils.hexToUtf8(name),
   }));
 
   ctx.body = allCandidates;
@@ -29,15 +29,14 @@ router.get('/ballot/:id', async ctx => {
 
 router.get('/ballot', async ctx => {
   const [err, response] = await to(blockchain.getBallots().call());
-  if(err) {
-    throw new ApiError(STATUS_CODES.INTERNAL_SERVER_ERROR, 'Error retrieving ballots from blockchain');
-  }
+  if(err) throw new ApiError(STATUS_CODES.INTERNAL_SERVER_ERROR, 'Error retrieving ballots from blockchain');
 
-  const { states, candidatesSizes } = response;
+  const { states, candidatesSizes, names } = response;
   const allBallots = map(states, (state, idx) => ({
-    state,
-    candidatesSize: candidatesSizes[idx],
-    id: idx,
+      id: idx,
+      name:  web3.utils.hexToUtf8(names[idx]),
+      candidatesSize: candidatesSizes[idx],
+      state
   }));
   ctx.body = allBallots;
 });
