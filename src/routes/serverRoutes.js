@@ -11,7 +11,6 @@ router.get('/serverInfo', async ctx => {
 
     ctx.statusCode = STATUS_CODES.OK;
     ctx.body  = {
-        serverStatus: 'on',
         environmentVariables: {
             contractAddress: env.CONTRACT_ADDRESS,
             contractName: response == null ? 'unknown' : response,
