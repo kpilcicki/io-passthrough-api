@@ -1,0 +1,6 @@
+#!/bin/bash
+export USER_DB=mysql://newuser:MyNewPass@localhost:3306/authentication
+export JWT_SECRET=dNGUTznuI7T9HkdyUXex4QXA3was9Ql5
+export CONTRACT_ADDRESS=0x21306B4aC92127137368A27dFe9e1E4eEdB07c37
+export SELF_ADDRESS=0xe7df82da5f93ccf130c53e44c12baf5ce21a1e71
+export BLOCKCHAIN_ADDRESS=http://localhost:8545
