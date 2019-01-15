@@ -29,4 +29,34 @@ router.get('/ballotResult/:ballotId', async ctx => {
   ctx.status = STATUS_CODES.OK;
 });
 
+router.get('/ballot/:id', async ctx => {
+  const ballotId = ctx.params.id;
+
+  const [err, response] = await to(blockchain.getCandidatsForBallot(ballotId).call());
+  if(err) throw new ApiError(STATUS_CODES.BAD_REQUEST, 'There is no such ballot');
+
+  const { names } = response;
+
+  const allCandidates = map(names, (name, idx) => ({
+      id: idx,
+      name: web3.utils.hexToUtf8(name),
+  }));
+
+  ctx.body = allCandidates;
+});
+
+router.get('/ballot', async ctx => {
+  const [err, response] = await to(blockchain.getBallots().call());
+  if(err) throw new ApiError(STATUS_CODES.INTERNAL_SERVER_ERROR, 'Error retrieving ballots from blockchain');
+
+  const { states, candidatesSizes, names } = response;
+  const allBallots = map(states, (state, idx) => ({
+      id: idx,
+      name:  web3.utils.hexToUtf8(names[idx]),
+      candidatesSize: candidatesSizes[idx],
+      state
+  }));
+  ctx.body = allBallots;
+});
+
 export const publicRoutes = router;
